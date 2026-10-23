@@ -3226,9 +3226,14 @@ async function addToCart(name, price, image, button) {
   checkoutOverlay.innerHTML=`<section class="checkout-box"><button class="modal-close" id="checkout-close">×</button><h2>CONFIRM ORDER</h2><p class="status" id="checkout-status"></p><div id="checkout-summary" class="checkout-summary"></div><form class="checkout-form" id="checkout-form">
     <label>Delivery address</label><textarea name="address" id="co-address" rows="3" required></textarea>
     <label>Postal code</label><input name="postal_code" id="co-postal" required>
-    <label>Mobile number</label><input name="phone" id="co-phone" required>
+    <label>Mobile number</label><input name="phone" id="co-phone" type="tel" required>
+    <label>Payment method</label>
+    <div class="cod-payment-option" style="border:1px solid #d9ad68;border-radius:12px;padding:13px;background:#fff3d9;color:#4c241d;display:flex;gap:12px;align-items:flex-start">
+      <input type="radio" id="payment-cod" name="payment_method" value="Cash on Delivery" checked required style="width:20px;height:20px;margin-top:2px;accent-color:#7d241b">
+      <label for="payment-cod" style="display:block;margin:0;cursor:pointer"><b>Cash on Delivery (COD)</b><span style="display:block;font-size:13px;margin-top:4px;line-height:1.5">Pay in cash when your order arrives. EL BRUSTO currently accepts Cash on Delivery only.</span></label>
+    </div>
     <label>Order note (optional)</label><textarea name="note" rows="2" placeholder="Optional instructions"></textarea>
-    <button class="btn" type="submit">CONFIRM ORDER</button>
+    <button class="btn" type="submit">PLACE COD ORDER</button>
   </form></section>`;
   document.body.appendChild(checkoutOverlay);
 
@@ -3282,6 +3287,7 @@ async function addToCart(name, price, image, button) {
           <div style="display:grid;place-items:center;width:76px;height:76px;margin:0 auto 16px;border-radius:50%;background:#e4f5e9;color:#19733b;font-size:42px;font-weight:800">✓</div>
           <h3 style="color:#19733b;margin:8px 0;font-size:25px">ORDER SUCCESSFUL!</h3>
           <p style="margin:10px 0;color:#624333">Your order <b>#${escapeHtml(order.order_id)}</b> has been placed successfully.</p>
+          <p style="margin:8px 0;color:#624333"><b>Payment:</b> Cash on Delivery (COD). Please prepare cash when your order arrives.</p>
           <p style="margin:8px 0 22px;color:#624333;line-height:1.7">Thank you for ordering from <b>EL BRUSTO!</b><br>We appreciate your order.</p>
           <button type="button" class="btn" id="success-okay-btn">OKAY</button>
         </div>`;
@@ -3320,6 +3326,7 @@ async function addToCart(name, price, image, button) {
           <p style="font-size:12px;color:#76513d;margin:5px 0 10px">Placed: ${escapeHtml((order.created_at||"").replace("T"," ").slice(0,16))}</p>
           ${items}<hr style="margin:10px 0;border:0;border-top:1px solid #e2c8a5">
           <div style="display:flex;justify-content:space-between"><b>Total</b><b>₱${Number(order.total).toFixed(2)}</b></div>
+          <p style="margin-top:8px"><b>Payment method:</b> ${escapeHtml(order.payment_method||"Cash on Delivery")}</p>
           <p style="margin-top:10px"><b>Estimated delivery:</b> ${delivery}</p>
           ${order.admin_note?`<p style="margin-top:6px"><b>Update from EL BRUSTO:</b> ${escapeHtml(order.admin_note)}</p>`:""}
           <p style="font-size:12px;color:#76513d;margin-top:8px">Deliver to: ${escapeHtml(order.address||"")}</p>
